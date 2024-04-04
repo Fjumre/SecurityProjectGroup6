@@ -1,0 +1,119 @@
+GET http://localhost:7007/api/events/
+
+###
+
+GET http://localhost:7007/api/events/1
+
+
+###
+
+POST http://localhost:7007/api/events/create
+
+{
+"title": "Dans",
+"description": "dans",
+"date": "2025-02-02",
+"time": "10:00",
+"duration": 120,
+"capacity": 36,
+"location": "København",
+"instructor": "Bibi",
+"price": 1215.00,
+"status": "Active",
+"category": null
+}
+
+
+###
+
+PUT http://localhost:7007/api/events/update/9
+
+"title": "Løb",
+"description": "løb",
+"date": "2027-02-02",
+"time": "20:00",
+"duration": 90,
+"capacity": 40,
+"location": "Aarhus",
+"instructor": "Bibi",
+"price": 751.00,
+"status": "Active",
+"category": null
+
+
+
+###
+
+DELETE http://localhost:7007/api/events/delete/9
+
+
+###
+
+GET http://localhost:7007/api/user/all
+
+###
+
+GET http://localhost:7007/api/user/6
+
+###
+
+POST http://localhost:7007/api/user/create
+
+{
+"name": "Flem",
+"password": "66655",
+"email": "vvvv@hhhh.com",
+"phoneNumber": 55444422,
+"role": ["user"]
+}
+
+###
+
+
+PUT http://localhost:7007/api/user/update/6
+
+{
+"name": "kkkkj",
+"password": "66655",
+"email": "vvvv@hhhh.com",
+"phoneNumber": 55444422
+}
+
+###
+
+DELETE http://localhost:7007/api/user/delete/1
+
+
+###
+
+
+GET http://localhost:7007/api/events/allregistrations/1
+
+###
+
+
+GET http://localhost:7007/api/events/registration/1
+
+###
+
+
+POST http://localhost:7007/api/events/eventregistration?event=10&user=2
+
+
+###
+
+POST http://localhost:7007/api/events/eventregistration/8
+
+{
+"id":5
+}
+
+
+###
+
+POST http://localhost:7007/api/events/removeuserevent/8
+
+{
+"id": 5
+}
+

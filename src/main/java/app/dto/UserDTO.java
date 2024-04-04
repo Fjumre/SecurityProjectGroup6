@@ -6,14 +6,13 @@ import app.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Getter
-@ToString
 @NoArgsConstructor
 @Setter
 public class UserDTO {
@@ -21,6 +20,8 @@ public class UserDTO {
     private String name;
     private String password;
     private Set<String> roles;
+    private Set<String> events;
+    private String newPassword;
 
     public UserDTO(String name, String password, Set<String> roles) {
         this.name = name;
@@ -35,14 +36,20 @@ public class UserDTO {
 
     public UserDTO(User user){
         this.name = user.getName();
-        this.password = user.getPassword();
-        this.roles = user.getRolesAsStrings();
+        this.email= user.getEmail();
+        this.phoneNumber= user.getPhoneNumber();
+        if (user.getRoles() != null) {
+            this.roles = user.getRolesAsStrings();
+        }
+        if (user.getEvents() != null) {
+            this.events = user.getEventsAsStrings();
+        }
     }
+
     public UserDTO(String name, Set<String> roleSet){
         this.name = name;
         this.roles = roleSet;
     }
-
 
     public static List<UserDTO> toUserDTOList(List<User> users) {
         List<UserDTO> userDTOList =  new ArrayList<>();
@@ -64,4 +71,18 @@ public class UserDTO {
     public String getPassword() {
         return password;
     }
+<<<<<<< Updated upstream
+=======
+
+    public int getPhoneNumber() {
+        return phoneNumber;
+    }
+
+
+    public Set<String> getEvents() {
+        return events;
+    }
+
+
+>>>>>>> Stashed changes
 }

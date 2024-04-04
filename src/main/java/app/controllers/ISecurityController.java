@@ -17,4 +17,6 @@ public interface ISecurityController {
     Handler authenticate();
     UserDTO verifyToken(String token);
 
+    Handler resetOfPassword();
+
 }

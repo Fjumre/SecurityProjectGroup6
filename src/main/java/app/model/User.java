@@ -1,5 +1,6 @@
 package app.model;
 
+import app.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,6 +40,30 @@ public class User {
         this.password = BCrypt.hashpw(password, salt);
     }
 
+<<<<<<< Updated upstream
+=======
+
+    public User(String name, String password, String email, int phoneNumber) {
+        this.name = name;
+        this.password = password;
+        String salt = BCrypt.gensalt();
+        this.password = BCrypt.hashpw(password, salt);
+        this.email= email;
+        this.phoneNumber= phoneNumber;
+    }
+
+    public User(String password) {
+        this.password = password;
+        String salt = BCrypt.gensalt();
+        this.password = BCrypt.hashpw(password, salt);
+    }
+
+    public User(String name, Set<Event> events) {
+        this.name = name;
+        this.events = events;
+    }
+
+>>>>>>> Stashed changes
     public boolean verifyUser(String password) {
         return BCrypt.checkpw(password, this.password);
     }
@@ -62,6 +87,17 @@ public class User {
             rolesAsStrings.add(role.getName());
         });
         return rolesAsStrings;
+    }
+
+    public Set<String> getEventsAsStrings() {
+        if (events.isEmpty()) {
+            return null;
+        }
+        Set<String> eventsAsStrings = new HashSet<>();
+        events.forEach((event) -> {
+            eventsAsStrings.add(event.getTitle());
+        });
+        return eventsAsStrings;
     }
 
 }

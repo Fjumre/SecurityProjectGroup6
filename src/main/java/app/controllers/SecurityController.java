@@ -10,6 +10,8 @@ import app.exceptions.NotAuthorizedException;
 import app.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
@@ -19,7 +21,8 @@ import io.javalin.http.Handler;
 import io.javalin.http.HttpStatus;
 import io.javalin.validation.ValidationException;
 import jakarta.persistence.EntityExistsException;
-
+import java.security.SecureRandom;
+import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
@@ -48,6 +51,44 @@ public class SecurityController implements ISecurityController{
             }
         };
     }
+
+
+
+    /*
+
+    Verify password, then hash it, for resting a password
+
+    */
+    @Override
+    public Handler resetOfPassword() {
+        return (ctx) -> {
+            UserDTO user = ctx.bodyAsClass(UserDTO.class);
+
+            // Validate user credentials
+            try {
+                User verify = securityDAO.verifyUserForReset(user.getEmail(), user.getPassword());
+
+                // Extract the new password from the request body
+                String newPassword = user.getNewPassword();
+                // Assuming the new password is provided in the 'newPassword' field
+
+                // Update the user's password in the database
+                User updatedUser = securityDAO.UpdatePassword(verify, newPassword);
+
+                // Create a token
+                String token = createToken(new UserDTO(updatedUser));
+
+                // Respond with the token and user's email
+                ctx.status(200).json(new TokenDTO(token, user.getEmail()));
+            } catch (EntityNotFoundException ex) {
+                // Handle invalid credentials
+                ctx.status(401).result(ex.getMessage());
+            }
+        };
+    }
+
+
+
     @Override
     public Handler login() {
         return (ctx) -> {
@@ -197,6 +238,18 @@ public class SecurityController implements ISecurityController{
     public int timeToExpire(String token) throws ParseException, NotAuthorizedException {
         SignedJWT jwt = SignedJWT.parse(token);
         return (int) (jwt.getJWTClaimsSet().getExpirationTime().getTime() - new Date().getTime());
+    }
+
+
+
+    private String generateResetToken(String email) {
+        // Generate a random string for the reset token
+        SecureRandom random = new SecureRandom();
+        String token = new BigInteger(130, random).toString(32);
+
+        // You may associate the token with the user's email in your database
+        // For simplicity, you can return the token directly
+        return token;
     }
 
 }

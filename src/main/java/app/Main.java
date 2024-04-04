@@ -41,6 +41,48 @@ public class Main {
                 .checkSecurityRoles();
     }
 
+<<<<<<< Updated upstream
+=======
+    public static void getRoutes(){
+        before(securityController.authenticate());
+        path("/events", () -> {
+            path("/", () -> {
+                before(securityController.authenticate());
+                get("", eventController.getAllEvents(), Role.ANYONE);
+                get("{id}", eventController.getEventById(), Role.ANYONE);
+                post("create", eventController.createEvent(), Role.ANYONE);
+                put("update/{id}", eventController.updateEvent(), Role.ANYONE);
+                delete("delete/{id}", eventController.deleteEvent(), Role.ANYONE);
+                get("allregistrations/{event_id}", eventController.getAllRegistrationsForEvent(), Role.ANYONE);
+                get("registration/{event_id}", eventController.getRegistrationById(), Role.ANYONE);
+                put("registrations/{event_id}", eventController.getRegistrationById(), Role.ANYONE);
+                post("eventregistration/{event_id}", eventController.registerUserForEvent(), Role.ANYONE);
+                post("removeuserevent/{event_id}", eventController.removeUserFromEvent(), Role.ANYONE);
+                get("error", ctx -> {
+                    throw new Exception(String.valueOf(ApplicationConfig.getInstance().setExceptionHandling()));
+                });
+            });
+    });
+    }
+
+    public static void getUserRoutes(){
+        before(securityController.authenticate());
+        path("/user", () -> {
+            path("/", () -> {
+            before(securityController.authenticate());
+            get("/all", userController.getAllUsers(), Role.ANYONE);
+            get("/{id}", userController.getUserById(), Role.ANYONE);
+            post("/create", userController.createUser(), Role.ANYONE);
+            put("/update/{id}", userController.updateUser(), Role.ANYONE);
+            delete("/delete/{id}", userController.deleteUser(), Role.ANYONE);
+            post("/logout", userController.logout(), Role.USER, Role.ADMIN, Role.INSTRUCTOR);
+            get("/error", ctx -> {
+                throw new Exception(String.valueOf(ApplicationConfig.getInstance().setExceptionHandling()));
+            });
+        });
+    });
+    }
+>>>>>>> Stashed changes
 
     public static void closeServer () {
         ApplicationConfig.getInstance().stopServer();
@@ -52,6 +94,7 @@ public class Main {
             path("/auth", ()->{
                 post("/login", securityController.login(),Role.ANYONE);
                 post("/register", securityController.register(),Role.ANYONE);
+                post("/resetpassword", securityController.resetOfPassword(), Role.USER, Role.ADMIN, Role.INSTRUCTOR);
             });
         };
     }
