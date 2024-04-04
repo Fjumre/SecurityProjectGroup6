@@ -19,6 +19,9 @@ public class UserDTO {
 
     private String name;
     private String password;
+    private String email;
+    private int phoneNumber;
+
     private Set<String> roles;
     private Set<String> events;
     private String newPassword;
@@ -27,6 +30,13 @@ public class UserDTO {
         this.name = name;
         this.password = password;
         this.roles = roles;
+    }
+
+    public UserDTO(String name, String password, String email, int phoneNumber) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
     }
 
     public UserDTO(String name, String password) {
@@ -71,8 +81,6 @@ public class UserDTO {
     public String getPassword() {
         return password;
     }
-<<<<<<< Updated upstream
-=======
 
     public int getPhoneNumber() {
         return phoneNumber;
@@ -84,5 +92,4 @@ public class UserDTO {
     }
 
 
->>>>>>> Stashed changes
 }

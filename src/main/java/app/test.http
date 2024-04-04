@@ -2,7 +2,7 @@ GET http://localhost:7007/api/events/
 
 ###
 
-GET http://localhost:7007/api/events/1
+GET http://localhost:7007/api/events/10
 
 
 ###
@@ -26,25 +26,33 @@ POST http://localhost:7007/api/events/create
 
 ###
 
-PUT http://localhost:7007/api/events/update/9
+PUT http://localhost:7007/api/events/update/10
 
-"title": "Løb",
-"description": "løb",
-"date": "2027-02-02",
-"time": "20:00",
-"duration": 90,
-"capacity": 40,
-"location": "Aarhus",
-"instructor": "Bibi",
-"price": 751.00,
-"status": "Active",
-"category": null
+{
+  "title": "Løb",
+  "description": "This is an example event",
+  "date": "2024-04-05",
+  "time": "13:30",
+  "duration": 120,
+  "capacity": 50,
+  "location": {
+"Aarhus"
+  },
+  "instructor": "John Doe",
+  "price": 20.99,
+  "category": {
+    "categoryId": 1,
+    "name": "Example Category"
+  },
+  "status": "Active"
+}
+
 
 
 
 ###
 
-DELETE http://localhost:7007/api/events/delete/9
+DELETE http://localhost:7007/api/events/delete/10
 
 
 ###
@@ -60,11 +68,11 @@ GET http://localhost:7007/api/user/6
 POST http://localhost:7007/api/user/create
 
 {
-"name": "Flem",
+"name": "Lam",
 "password": "66655",
-"email": "vvvv@hhhh.com",
-"phoneNumber": 55444422,
-"role": ["user"]
+"email": "vvtt@hhhh.com",
+"phoneNumber": 5244422
+
 }
 
 ###
@@ -73,7 +81,7 @@ POST http://localhost:7007/api/user/create
 PUT http://localhost:7007/api/user/update/6
 
 {
-"name": "kkkkj",
+"name": "kllj",
 "password": "66655",
 "email": "vvvv@hhhh.com",
 "phoneNumber": 55444422
@@ -81,7 +89,7 @@ PUT http://localhost:7007/api/user/update/6
 
 ###
 
-DELETE http://localhost:7007/api/user/delete/1
+DELETE http://localhost:7007/api/user/delete/5
 
 
 ###

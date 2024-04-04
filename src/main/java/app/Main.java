@@ -2,8 +2,10 @@ package app;
 
 import app.config.ApplicationConfig;
 import app.config.HibernateConfig;
-import app.controllers.ISecurityController;
-import app.controllers.SecurityController;
+import app.controllers.*;
+import app.dao.EventDAO;
+import app.dao.UserDAO;
+import app.model.Event;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.apibuilder.EndpointGroup;
 import io.javalin.security.RouteRole;
@@ -15,6 +17,13 @@ import static io.javalin.apibuilder.ApiBuilder.get;
 public class Main {
 
     private static ISecurityController securityController = new SecurityController();
+
+    static EntityManagerFactory emf =HibernateConfig.getEntityManagerFactory();
+    private static EventDAO eventDAO= new EventDAO(emf);
+    private static IEventController eventController= new EventController(eventDAO);
+
+    private static UserDAO userDAO= new UserDAO(emf);
+    private static IUserController userController= new UserController(userDAO);
     private static ObjectMapper om = new ObjectMapper();
     public static void main(String[] args) {
 
@@ -36,19 +45,19 @@ public class Main {
                 .setRoute(getSecuredRoutes())
                 .setRoute(() -> {
 
+                    getUserRoutes();
+                    getRoutes();
 
                 })
                 .checkSecurityRoles();
     }
 
-<<<<<<< Updated upstream
-=======
     public static void getRoutes(){
         before(securityController.authenticate());
         path("/events", () -> {
             path("/", () -> {
                 before(securityController.authenticate());
-                get("", eventController.getAllEvents(), Role.ANYONE);
+                get("/", eventController.getAllEvents(), Role.ANYONE);
                 get("{id}", eventController.getEventById(), Role.ANYONE);
                 post("create", eventController.createEvent(), Role.ANYONE);
                 put("update/{id}", eventController.updateEvent(), Role.ANYONE);
@@ -82,7 +91,7 @@ public class Main {
         });
     });
     }
->>>>>>> Stashed changes
+
 
     public static void closeServer () {
         ApplicationConfig.getInstance().stopServer();

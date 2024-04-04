@@ -21,6 +21,8 @@ import io.javalin.http.Handler;
 import io.javalin.http.HttpStatus;
 import io.javalin.validation.ValidationException;
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityManagerFactory;
+
 import java.security.SecureRandom;
 import java.math.BigInteger;
 import java.text.ParseException;
@@ -32,7 +34,10 @@ import java.util.stream.Collectors;
 
 
 public class SecurityController implements ISecurityController{
-    UserDAO securityDAO = new UserDAO(HibernateConfig.getEntityManagerFactory());
+
+    EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
+    UserDAO securityDAO = new UserDAO(emf);
+
     ObjectMapper objectMapper = new ObjectMapper();
     private final String SECRET_KEY = "DetteErEnHemmeligNøgleTilAtDanneJWT_Tokensmed";
     @Override
@@ -41,7 +46,7 @@ public class SecurityController implements ISecurityController{
             ObjectNode returnObject = objectMapper.createObjectNode();
             try {
                 UserDTO userInput = ctx.bodyAsClass(UserDTO.class);
-                User created = securityDAO.createUser(userInput.getName(), userInput.getPassword());
+                User created = securityDAO.createUser(userInput.getName(), userInput.getPassword(), userInput.getEmail(), userInput.getPhoneNumber());
 
                 String token = createToken(new UserDTO(created));
                 ctx.status(HttpStatus.CREATED).json(new TokenDTO(token, userInput.getName()));
@@ -241,15 +246,5 @@ public class SecurityController implements ISecurityController{
     }
 
 
-
-    private String generateResetToken(String email) {
-        // Generate a random string for the reset token
-        SecureRandom random = new SecureRandom();
-        String token = new BigInteger(130, random).toString(32);
-
-        // You may associate the token with the user's email in your database
-        // For simplicity, you can return the token directly
-        return token;
-    }
 
 }

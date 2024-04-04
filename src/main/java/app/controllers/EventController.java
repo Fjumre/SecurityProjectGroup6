@@ -5,7 +5,7 @@ import app.dao.EventDAO;
 import app.dao.UserDAO;
 import app.dto.EventDTO;
 import app.dto.UserDTO;
-import app.functionallity.EventFunctionality;
+
 import app.model.Event;
 import app.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,12 +23,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
-public class EventController implements IEventController{
+public class EventController implements IEventController {
     EventDAO eventDAO = new EventDAO();
     ObjectMapper objectMapper = new ObjectMapper();
 
     EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
-    EventFunctionality eventFunctionality= new EventFunctionality();
+
 
     public EventController(EventDAO eventDAO) {
         this.eventDAO = eventDAO;
@@ -44,22 +44,28 @@ public class EventController implements IEventController{
 //        return new UserDTO(user);
 //    }
 
+    private Event convertToEntity(EventDTO eventDTO) {
 
+        return new Event(eventDTO);
+    }
     @Override
     public Handler getAllEvents() {
         return (ctx) -> {
             ObjectNode returnObject = objectMapper.createObjectNode();
             try {
-                ctx.json(eventDAO.getAlleEvents());
+                List<Event> events = eventDAO.getAlleEvents();
+
+                List<EventDTO> eventDTOS = events.stream()
+                        .map(EventDTO::new)
+                        .collect(Collectors.toList());
+
+                ctx.json(eventDTOS);
             } catch (Exception e) {
                 ctx.status(500);
                 ctx.json(returnObject.put("msg", "Internal server error"));
             }
         };
-        }
-
-
-
+    }
 
 
     @Override
@@ -68,7 +74,9 @@ public class EventController implements IEventController{
             ObjectNode returnObject = objectMapper.createObjectNode();
             try {
                 int id = Integer.parseInt(ctx.pathParam("id"));
-                ctx.json(eventDAO.getEventById(id));
+                Event event= eventDAO.getEventById(id);
+                EventDTO eventDTO = new EventDTO(event);
+                ctx.json(eventDTO);
             } catch (Exception e) {
                 ctx.status(500);
                 ctx.json(returnObject.put("msg", "Internal server error"));
@@ -104,10 +112,7 @@ public class EventController implements IEventController{
         };
     }
 
-    private Event convertToEntity(EventDTO eventDTO) {
 
-        return new Event(eventDTO);
-    }
 
 
     @Override
@@ -118,11 +123,15 @@ public class EventController implements IEventController{
                 EventDTO eventInput = ctx.bodyAsClass(EventDTO.class);
                 int id = Integer.parseInt(ctx.pathParam("id"));
                 Event updated = eventDAO.getEventById(id);
-                eventInput.getEventId();
-                ctx.json(eventDAO.update(updated).getEventId());
+                EventDTO updatedEventDTO= new EventDTO(updated);
 
+                eventDAO.update(updated);
+
+
+                ctx.json(updatedEventDTO);
             } catch (Exception e) {
                 ctx.status(500);
+                System.out.println(e);
                 ctx.json(returnObject.put("msg", "Internal server error"));
             }
         };
@@ -167,7 +176,7 @@ public class EventController implements IEventController{
             ObjectNode returnObject = objectMapper.createObjectNode();
             try {
                 int id = Integer.parseInt(ctx.pathParam("event_id"));
-                ctx.json("There are "+ eventDAO.getRegistrationsCountById(id) +" users registered");
+                ctx.json("There are " + eventDAO.getRegistrationsCountById(id) + " users registered");
             } catch (Exception e) {
                 ctx.status(500);
                 System.out.println(e);
@@ -207,6 +216,7 @@ public class EventController implements IEventController{
 
             ctx.status(200).result("User removed for the event successfully");
         };
+
 
     }
 }

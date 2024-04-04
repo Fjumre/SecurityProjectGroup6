@@ -1,8 +1,6 @@
 package app.dao;
 
-<<<<<<< Updated upstream
-public class EventDAO {
-=======
+
 import app.model.Event;
 import app.model.User;
 import jakarta.persistence.*;
@@ -185,7 +183,5 @@ public EventDAO(EntityManagerFactory emf) {
             em.close();
         }
     }
-
->>>>>>> Stashed changes
 }
 

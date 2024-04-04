@@ -1,6 +1,6 @@
 package app.model;
 
-import app.dto.UserDTO;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,9 +22,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name= "id", nullable = false, unique = true)
     private int id;
+    @Column(name = "username")
     private String name;
+    @Column(name = "password")
     private String password;
+    @Column(name = "email")
     private String email;
+    @Column(name = "phonenumber")
     private int phoneNumber;
 
     @ManyToMany
@@ -33,6 +37,13 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_name", referencedColumnName = "name"))
     private Set<Role> roles = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(name = "user_events",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id", referencedColumnName = "event_id"))
+    private Set<Event> events = new HashSet<>();
+
+
     public User(String name, String password) {
         this.name = name;
         this.password = password;
@@ -40,8 +51,6 @@ public class User {
         this.password = BCrypt.hashpw(password, salt);
     }
 
-<<<<<<< Updated upstream
-=======
 
     public User(String name, String password, String email, int phoneNumber) {
         this.name = name;
@@ -63,7 +72,6 @@ public class User {
         this.events = events;
     }
 
->>>>>>> Stashed changes
     public boolean verifyUser(String password) {
         return BCrypt.checkpw(password, this.password);
     }
@@ -72,11 +80,19 @@ public class User {
         roles.add(role);
         role.getUsers().add(this);
     }
-
     public void removeRole(Role role) {
         roles.remove(role);
         role.getUsers().remove(this);
     }
+    public void addEvent(Event event) {
+        events.add(event);
+        event.getUsers().add(this);
+    }
+    public void removeEvent(Event event) {
+        events.remove(event);
+        event.getUsers().remove(this);
+    }
+
 
     public Set<String> getRolesAsStrings() {
         if (roles.isEmpty()) {
