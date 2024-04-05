@@ -77,4 +77,12 @@ private int EventId;
         //Image = Arrays.toString(event.getImage());
         Status = event.getStatus();
     }
+
+    public Integer getCategoryId() {
+        // Check if category is not null to avoid NullPointerException
+        if (this.category != null) {
+            return this.category.getCategoryId(); // Assuming Category class has getCategoryId() method
+        }
+        return null; // Return null if category is null
+    }
 }

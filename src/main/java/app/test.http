@@ -35,15 +35,13 @@ PUT http://localhost:7007/api/events/update/10
   "time": "13:30",
   "duration": 120,
   "capacity": 50,
-  "location": {
-"Aarhus"
-  },
+  "location": "Aarhus",
   "instructor": "John Doe",
   "price": 20.99,
   "category": {
-    "categoryId": 1,
-    "name": "Example Category"
-  },
+  "CategoryID": 2,
+  "CategoryName": "løb"
+},
   "status": "Active"
 }
 
