@@ -92,7 +92,36 @@ PUT http://localhost:7007/api/user/update/6
 DELETE http://localhost:7007/api/user/delete/5
 
 
-###
+### Get all registrations for an event.
+
+GET http://localhost:7007/api/registration/event/3
+
+
+
+
+### Get all registrations for a user.
+
+GET http://localhost:7007/api/registration/user/2
+
+
+### Create a registration.
+
+POST http://localhost:7007/api/registration/create/2
+
+{
+"event": 3,
+"user": 2
+}
+
+
+
+### Delete a registration.
+
+DELETE http://localhost:7007/api/registration/delete/12
+
+```
+
+
 
 
 GET http://localhost:7007/api/events/allregistrations/1
