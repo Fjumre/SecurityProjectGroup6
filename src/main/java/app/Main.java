@@ -57,10 +57,10 @@ public class Main {
         path("/events", () -> {
             path("/", () -> {
                 before(securityController.authenticate());
-                get("/", eventController.getAllEvents(), Role.USER, Role.INSTRUCTOR, Role.ADMIN);
-                get("{id}", eventController.getEventById(), Role.USER, Role.INSTRUCTOR, Role.ADMIN);
-                post("create", eventController.createEvent(), Role.USER, Role.INSTRUCTOR, Role.ADMIN);
-                put("update/{id}", eventController.updateEvent(), Role.USER, Role.INSTRUCTOR, Role.ADMIN);
+                get("/", eventController.getAllEvents(), Role.ANYONE);
+                get("{id}", eventController.getEventById(), Role.ANYONE);
+                post("create", eventController.createEvent(), Role.INSTRUCTOR, Role.ADMIN);
+                put("update/{id}", eventController.updateEvent(), Role.INSTRUCTOR, Role.ADMIN);
                 delete("delete/{id}", eventController.deleteEvent(), Role.INSTRUCTOR, Role.ADMIN);
                 get("allregistrations/{event_id}", eventController.getAllRegistrationsForEvent(), Role.INSTRUCTOR, Role.ADMIN);
                 get("registration/{event_id}", eventController.getRegistrationById(), Role.INSTRUCTOR, Role.ADMIN);

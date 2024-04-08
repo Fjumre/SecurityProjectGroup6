@@ -230,8 +230,6 @@ public class EventController implements IEventController {
     public Handler registerUserForEvent() {
         return ctx -> {
 
-            //int eventId = Integer.parseInt(ctx.queryParam("event"));
-            //int userId = Integer.parseInt(ctx.queryParam("user"));
 
             int eventId = Integer.parseInt(ctx.pathParam("event_id"));
             JsonObject requestBody = JsonParser.parseString(ctx.body()).getAsJsonObject();
