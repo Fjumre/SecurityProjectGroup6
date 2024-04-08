@@ -27,22 +27,22 @@
 #### GET     /api/events/eventsbystatus/{status}         response: {Events by Status}               Retrieve all events by status
 
 ## User Routes
-GET     /api/user/all                               response: {List of all users}              Retrieve all users
-GET     /api/user/{id}                              response: {User by ID}                     Retrieve a user by its ID
-POST    /api/user/create                            request payload: {User details}            Add a new user
-PUT     /api/user/update/{id}                       request payload: {Updated user details}    Update a user by ID
-DELETE  /api/user/delete/{id}                       response: {Confirmation message}           Delete a user by ID
-POST    /api/user/logout                            response: {Logout confirmation}            Log out a user
+#### GET     /api/user/all                               response: {List of all users}              Retrieve all users
+#### GET     /api/user/{id}                              response: {User by ID}                     Retrieve a user by its ID
+#### POST    /api/user/create                            request payload: {User details}            Add a new user
+#### PUT     /api/user/update/{id}                       request payload: {Updated user details}    Update a user by ID
+#### DELETE  /api/user/delete/{id}                       response: {Confirmation message}           Delete a user by ID
+#### POST    /api/user/logout                            response: {Logout confirmation}            Log out a user
 
 ## Security and Authentication
-POST    /api/auth/login                             request payload: {Login credentials}       Authenticate a user
-POST    /api/auth/register                          request payload: {Registration details}    Register a new user
-POST    /api/auth/resetpassword                     request payload: {Reset details}           Reset user password
+#### POST    /api/auth/login                             request payload: {Login credentials}       Authenticate a user
+#### POST    /api/auth/register                          request payload: {Registration details}    Register a new user
+#### POST    /api/auth/resetpassword                     request payload: {Reset details}           Reset user password
 
 ## Protected Routes
-GET     /api/protected/user                         response: {Protected message}              Access protected content for USER
-GET     /api/protected/instructor                   response: {Protected message}              Access protected content for INSTRUCTOR
-GET     /api/protected/admin                        response: {Protected message}              Access protected content for ADMIN
+#### GET     /api/protected/user                         response: {Protected message}              Access protected content for USER
+#### GET     /api/protected/instructor                   response: {Protected message}              Access protected content for INSTRUCTOR
+#### GET     /api/protected/admin                        response: {Protected message}              Access protected content for ADMIN
 
 
 
