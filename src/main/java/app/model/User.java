@@ -76,6 +76,16 @@ public class User {
         return BCrypt.checkpw(password, this.password);
     }
 
+
+    public User(String name, String password, String email, int phoneNumber, Set<Role> roles, Set<Event> events) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.roles = roles;
+        this.events = events;
+    }
+
     public void addRole(Role role) {
         roles.add(role);
         role.getUsers().add(this);

@@ -28,6 +28,7 @@ import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
@@ -98,9 +99,14 @@ public class SecurityController implements ISecurityController{
     public Handler login() {
         return (ctx) -> {
             ObjectNode returnObject = objectMapper.createObjectNode(); // for sending json messages back to the client
+            String rawJson = ctx.body();
+            System.out.println("Received raw JSON payload: " + rawJson);
+
             try {
+                // Now, proceed with the usual deserialization and processing
                 UserDTO user = ctx.bodyAsClass(UserDTO.class);
                 System.out.println("USER IN LOGIN: " + user);
+
 
                 User verifiedUserEntity = securityDAO.verifyUser(user.getName(), user.getPassword());
                 String token = createToken(new UserDTO(verifiedUserEntity));
@@ -110,8 +116,12 @@ public class SecurityController implements ISecurityController{
                 ctx.status(401);
                 System.out.println(e.getMessage());
                 ctx.json(returnObject.put("msg", e.getMessage()));
-            }
-        };
+            } catch (Exception e) {
+            e.printStackTrace(); // Log the stack trace to the console
+            ctx.status(500).json(Map.of("error", "Internal server error: " + e.getMessage()));
+        }
+
+    };
     }
 
 
@@ -138,7 +148,7 @@ public class SecurityController implements ISecurityController{
             JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                     .subject(user.getName())
                     .issuer(ISSUER)
-                    .claim("username", user.getName())
+                    .claim("name", user.getName())
                     .claim("roles", user.getRoles().stream().reduce("", (s1, s2) -> s1 + "," + s2))
                     .expirationTime(new Date(new Date().getTime() + Integer.parseInt(TOKEN_EXPIRE_TIME)))
                     .build();

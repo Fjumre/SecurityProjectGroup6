@@ -59,7 +59,7 @@ public class UserController implements IUserController{
             UserDTO userDTO = ctx.bodyAsClass(UserDTO.class);
 
             try {
-                User newUser = userDAO.createUser(userDTO.getName(), userDTO.getPassword(),userDTO.getEmail(), userDTO.getPhoneNumber());
+                User newUser = userDAO.createUser(userDTO.getName(), userDTO.getPassword(), userDTO.getEmail(), userDTO.getPhoneNumber());
                 ctx.status(201);
                 ctx.json(newUser);
             } catch (Exception e) {

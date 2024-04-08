@@ -66,10 +66,10 @@ GET http://localhost:7007/api/user/6
 POST http://localhost:7007/api/user/create
 
 {
-"name": "Lam",
-"password": "66655",
-"email": "vvtt@hhhh.com",
-"phoneNumber": 5244422
+"name": "Harry",
+"password": "1234",
+"email": "jj@hhhh.com",
+"phoneNumber": 53324422
 
 }
 
@@ -133,3 +133,15 @@ GET http://localhost:7007/api/events/eventsbycategory/2
 
 
 GET http://localhost:7007/api/events/eventsbystatus/Active
+
+
+###
+
+
+POST http://localhost:7007/api/auth/login
+
+{
+"name": "Harry",
+"password": "1234"
+
+}

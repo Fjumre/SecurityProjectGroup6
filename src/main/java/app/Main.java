@@ -40,8 +40,8 @@ public class Main {
                 .initiateServer()
                 .startServer(7007)
                 .setExceptionHandling()
-                .setRoute(getSecurityRoutes())
                 .setupAccessManager()
+                .setRoute(getSecurityRoutes())
                 .setRoute(getSecuredRoutes())
                 .setRoute(() -> {
 

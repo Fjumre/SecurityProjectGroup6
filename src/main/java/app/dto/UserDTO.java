@@ -20,41 +20,48 @@ public class UserDTO {
     private String name;
     private String password;
     private String email;
-    private int phoneNumber;
+    private Integer phoneNumber;
 
-    private Set<String> roles;
-    private Set<String> events;
+    private Set<String> roles = new HashSet<>();
+    private Set<String> events = new HashSet<>();
     private String newPassword;
 
+
+    public UserDTO(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
     public UserDTO(String name, String password, Set<String> roles) {
         this.name = name;
         this.password = password;
         this.roles = roles;
     }
 
-    public UserDTO(String name, String password, String email, int phoneNumber) {
+    public UserDTO(String name, String password, String email, Integer phoneNumber) {
         this.name = name;
         this.password = password;
         this.email = email;
         this.phoneNumber = phoneNumber;
     }
 
-    public UserDTO(String name, String password) {
-        this.name = name;
-        this.password = password;
-    }
-
     public UserDTO(User user){
         this.name = user.getName();
-        this.email= user.getEmail();
-        this.phoneNumber= user.getPhoneNumber();
-        if (user.getRoles() != null) {
-            this.roles = user.getRolesAsStrings();
-        }
-        if (user.getEvents() != null) {
-            this.events = user.getEventsAsStrings();
-        }
+        this.password= user.getPassword();
     }
+
+
+//    public UserDTO(User user){
+//        this.name = user.getName();
+//        this.password= user.getPassword();
+//        this.email= user.getEmail();
+//        this.phoneNumber= user.getPhoneNumber();
+//        if (user.getRoles() != null) {
+//            this.roles = user.getRolesAsStrings();
+//        }
+//        if (user.getEvents() != null) {
+//            this.events = user.getEventsAsStrings();
+//        }
+//    }
 
     public UserDTO(String name, Set<String> roleSet){
         this.name = name;
@@ -82,7 +89,7 @@ public class UserDTO {
         return password;
     }
 
-    public int getPhoneNumber() {
+    public Integer getPhoneNumber() {
         return phoneNumber;
     }
 

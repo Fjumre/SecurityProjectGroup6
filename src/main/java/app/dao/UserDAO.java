@@ -3,11 +3,14 @@ package app.dao;
 import app.config.HibernateConfig;
 import app.dto.UserDTO;
 import app.exceptions.EntityNotFoundException;
+import app.exceptions.ValidationException;
 import app.model.Role;
 import app.model.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.NoResultException;
 import org.mindrot.jbcrypt.BCrypt;
+
 
 import java.util.List;
 
@@ -19,23 +22,38 @@ public class UserDAO implements ISecurityDAO {
     }
 
     @Override
-    public User createUser(String username, String password, String email, int phoneNumber) {
+    public User createUser(String username, String password, String email, Integer phoneNumber) {
         EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        User user = new User(username, password, email, phoneNumber);
-        Role userRole = em.find(Role.class, "user");
-        if (userRole == null) {
-            userRole = new Role("user");
-            em.persist(userRole);
+        try {
+            em.getTransaction().begin();
+            User user = new User(username, password, email, phoneNumber);
+
+            // Ensure the 'user' role exists and is retrieved or created
+            Role userRole = em.createQuery("SELECT r FROM Role r WHERE r.name = :name", Role.class)
+                    .setParameter("name", "user")
+                    .getResultStream().findFirst().orElseGet(() -> {
+                        Role newRole = new Role("user");
+                        em.persist(newRole);
+                        return newRole;
+                    });
+
+            // Assign the 'user' role to the new user
+            user.addRole(userRole);
+
+            em.persist(user);
+            em.getTransaction().commit();
+
+            return user;
+        } finally {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            em.close();
         }
-        user.addRole(userRole);
-        em.persist(user);
-        em.getTransaction().commit();
-        em.close();
-        return user;
     }
 
-//    public User verifyUser(String username, String password) throws EntityNotFoundException {
+
+    //    public User verifyUser(String username, String password) throws EntityNotFoundException {
 //        EntityManager em = emf.createEntityManager();
 //        User user = em.find(User.class, username);
 //
@@ -96,18 +114,27 @@ public class UserDAO implements ISecurityDAO {
         }
 
 
-        public User verifyUser (String name, String password) throws EntityNotFoundException {
-            EntityManager em = emf.createEntityManager();
-            User user = em.find(User.class, name);
-            if (user == null)
-                throw new EntityNotFoundException("No user found with username: " + name);
-            if (!user.verifyUser(password))
+    public User verifyUser(String name, String password) throws EntityNotFoundException {
+        EntityManager em = emf.createEntityManager();
+        try {
+            // Using JPQL to query by username
+            User user = em.createQuery("SELECT u FROM User u WHERE u.name = :name", User.class)
+                    .setParameter("name", name)
+                    .getSingleResult();
+
+
+            if (!user.verifyUser(password)) {
                 throw new EntityNotFoundException("Wrong password");
+            }
             return user;
+        } catch (NoResultException e) {
+             throw new EntityNotFoundException("No user found with that name: " + name);
+        } finally {
+            em.close();
         }
+    }
 
-
-        @Override
+    @Override
         public User verifyUserForReset (String email, String password) throws EntityNotFoundException {
             EntityManager em = emf.createEntityManager();
             User user = em.find(User.class, email);
