@@ -1,5 +1,7 @@
 # SecurityProjectGroup6
 
+#### Vi lavede det hver for sig men sammen, vi kodede sammen men lavede stadigvæg classes og methods hver for sig
+
 ## Domain digram
 
 ![img_2.png](img_2.png)
