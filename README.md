@@ -7,7 +7,9 @@
 
 ![img_1.png](img_1.png)
 
+## ERD Diagram
 
+![SecurityProjectERD.png](SecurityProjectERD.png)
 
 # End Points
 
