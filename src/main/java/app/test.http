@@ -123,3 +123,13 @@ POST http://localhost:7007/api/events/removeuserevent/8
 "id": 5
 }
 
+###
+
+
+GET http://localhost:7007/api/events/eventsbycategory/2
+
+
+###
+
+
+GET http://localhost:7007/api/events/eventsbystatus/Active

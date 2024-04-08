@@ -33,7 +33,7 @@ public class EventController implements IEventController {
 
 
     EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
-    EntityManager em= emf.createEntityManager();
+    EntityManager em = emf.createEntityManager();
 
     public EventController(EventDAO eventDAO) {
         this.eventDAO = eventDAO;
@@ -53,6 +53,7 @@ public class EventController implements IEventController {
 
         return new Event(eventDTO);
     }
+
     @Override
     public Handler getAllEvents() {
         return (ctx) -> {
@@ -79,7 +80,7 @@ public class EventController implements IEventController {
             ObjectNode returnObject = objectMapper.createObjectNode();
             try {
                 int id = Integer.parseInt(ctx.pathParam("id"));
-                Event event= eventDAO.getEventById(id);
+                Event event = eventDAO.getEventById(id);
                 EventDTO eventDTO = new EventDTO(event);
                 ctx.json(eventDTO);
             } catch (Exception e) {
@@ -118,8 +119,6 @@ public class EventController implements IEventController {
     }
 
 
-
-
     @Override
     public Handler updateEvent() {
         return ctx -> {
@@ -154,6 +153,7 @@ public class EventController implements IEventController {
             }
         };
     }
+
     private void updateEventEntityWithDTO(Event event, EventDTO dto) {
         event.setTitle(dto.getTitle());
         event.setDescription(dto.getDescription());
@@ -172,6 +172,7 @@ public class EventController implements IEventController {
             event.setCategory(category);
         }
     }
+
     private Category findCategoryById(Integer categoryId) {
         return em.find(Category.class, categoryId);
     }
@@ -257,5 +258,51 @@ public class EventController implements IEventController {
         };
 
 
+    }
+
+    @Override
+    public Handler getAllEventsByCategory() {
+        return (ctx) -> {
+            ObjectNode returnObject = objectMapper.createObjectNode();
+            try {
+                int categoryId = Integer.parseInt(ctx.pathParam("category_id"));
+                List<Event> events = eventDAO.getEventsByCategory(categoryId);
+
+                List<EventDTO> eventDTOS = events.stream()
+                        .map(EventDTO::new)
+                        .collect(Collectors.toList());
+
+                ctx.json(eventDTOS);
+            } catch (NumberFormatException e) {
+                ctx.status(400).json(returnObject.put("msg", "Invalid category ID format"));
+            } catch (Exception e) {
+                ctx.status(500);
+                System.out.println(e);
+                ctx.json(returnObject.put("msg", "Internal server error"));
+            }
+        };
+    }
+
+    @Override
+    public Handler getAllEventsByStatus() {
+        return (ctx) -> {
+            ObjectNode returnObject = objectMapper.createObjectNode();
+            try {
+                String status = ctx.pathParam("status");
+                List<Event> events = eventDAO.getEventByStatus(status);
+
+                List<EventDTO> eventDTOS = events.stream()
+                        .map(EventDTO::new)
+                        .collect(Collectors.toList());
+
+                ctx.json(eventDTOS);
+            } catch (NumberFormatException e) {
+                ctx.status(400).json(returnObject.put("msg", "Invalid category ID format"));
+            } catch (Exception e) {
+                ctx.status(500);
+                System.out.println(e);
+                ctx.json(returnObject.put("msg", "Internal server error"));
+            }
+        };
     }
 }

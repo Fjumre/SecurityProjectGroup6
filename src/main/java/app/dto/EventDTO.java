@@ -81,7 +81,7 @@ private int EventId;
     public Integer getCategoryId() {
         // Check if category is not null to avoid NullPointerException
         if (this.category != null) {
-            return this.category.getCategoryId(); // Assuming Category class has getCategoryId() method
+            return this.category.getCategoryId();
         }
         return null; // Return null if category is null
     }

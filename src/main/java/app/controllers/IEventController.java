@@ -18,4 +18,7 @@ public interface IEventController {
     Handler registerUserForEvent();
 
     Handler removeUserFromEvent();
+
+    Handler getAllEventsByCategory();
+    Handler getAllEventsByStatus();
 }

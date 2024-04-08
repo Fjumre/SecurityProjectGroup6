@@ -37,9 +37,29 @@ public EventDAO(EntityManagerFactory emf) {
         return em.find(Event.class, id);
     }
 
+    public List<Event> getEventsByCategory(Integer categoryId) {
+        String jpql = "SELECT e FROM Event e WHERE e.category.CategoryID = :categoryId";
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.createQuery(jpql, Event.class)
+                    .setParameter("categoryId", categoryId)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
 
-
-
+    public List<Event> getEventByStatus(String status) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            String jpql = "SELECT e FROM Event e WHERE e.Status = :status";
+            TypedQuery<Event> query = em.createQuery(jpql, Event.class);
+            query.setParameter("status", status);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
 
     public Event create(Event event) {
         EntityManager em = emf.createEntityManager();

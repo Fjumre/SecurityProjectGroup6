@@ -57,16 +57,18 @@ public class Main {
         path("/events", () -> {
             path("/", () -> {
                 before(securityController.authenticate());
-                get("/", eventController.getAllEvents(), Role.ANYONE);
-                get("{id}", eventController.getEventById(), Role.ANYONE);
-                post("create", eventController.createEvent(), Role.ANYONE);
-                put("update/{id}", eventController.updateEvent(), Role.ANYONE);
-                delete("delete/{id}", eventController.deleteEvent(), Role.ANYONE);
-                get("allregistrations/{event_id}", eventController.getAllRegistrationsForEvent(), Role.ANYONE);
-                get("registration/{event_id}", eventController.getRegistrationById(), Role.ANYONE);
-                put("registrations/{event_id}", eventController.getRegistrationById(), Role.ANYONE);
-                post("eventregistration/{event_id}", eventController.registerUserForEvent(), Role.ANYONE);
-                post("removeuserevent/{event_id}", eventController.removeUserFromEvent(), Role.ANYONE);
+                get("/", eventController.getAllEvents(), Role.USER, Role.INSTRUCTOR, Role.ADMIN);
+                get("{id}", eventController.getEventById(), Role.USER, Role.INSTRUCTOR, Role.ADMIN);
+                post("create", eventController.createEvent(), Role.USER, Role.INSTRUCTOR, Role.ADMIN);
+                put("update/{id}", eventController.updateEvent(), Role.USER, Role.INSTRUCTOR, Role.ADMIN);
+                delete("delete/{id}", eventController.deleteEvent(), Role.INSTRUCTOR, Role.ADMIN);
+                get("allregistrations/{event_id}", eventController.getAllRegistrationsForEvent(), Role.INSTRUCTOR, Role.ADMIN);
+                get("registration/{event_id}", eventController.getRegistrationById(), Role.INSTRUCTOR, Role.ADMIN);
+                put("registrations/{event_id}", eventController.getRegistrationById(), Role.INSTRUCTOR, Role.ADMIN);
+                post("eventregistration/{event_id}", eventController.registerUserForEvent(), Role.USER, Role.INSTRUCTOR, Role.ADMIN);
+                post("removeuserevent/{event_id}", eventController.removeUserFromEvent(), Role.USER, Role.INSTRUCTOR, Role.ADMIN);
+                get("eventsbycategory/{category_id}", eventController.getAllEventsByCategory(), Role.ANYONE);
+                get("eventsbystatus/{status}", eventController.getAllEventsByStatus(), Role.ANYONE);
                 get("error", ctx -> {
                     throw new Exception(String.valueOf(ApplicationConfig.getInstance().setExceptionHandling()));
                 });
@@ -79,11 +81,11 @@ public class Main {
         path("/user", () -> {
             path("/", () -> {
             before(securityController.authenticate());
-            get("/all", userController.getAllUsers(), Role.ANYONE);
-            get("/{id}", userController.getUserById(), Role.ANYONE);
+            get("/all", userController.getAllUsers(), Role.ADMIN);
+            get("/{id}", userController.getUserById(), Role.ADMIN);
             post("/create", userController.createUser(), Role.ANYONE);
-            put("/update/{id}", userController.updateUser(), Role.ANYONE);
-            delete("/delete/{id}", userController.deleteUser(), Role.ANYONE);
+            put("/update/{id}", userController.updateUser(), Role.USER, Role.INSTRUCTOR, Role.ADMIN);
+            delete("/delete/{id}", userController.deleteUser(), Role.USER, Role.INSTRUCTOR, Role.ADMIN);
             post("/logout", userController.logout(), Role.USER, Role.ADMIN, Role.INSTRUCTOR);
             get("/error", ctx -> {
                 throw new Exception(String.valueOf(ApplicationConfig.getInstance().setExceptionHandling()));
@@ -103,7 +105,7 @@ public class Main {
             path("/auth", ()->{
                 post("/login", securityController.login(),Role.ANYONE);
                 post("/register", securityController.register(),Role.ANYONE);
-                post("/resetpassword", securityController.resetOfPassword(), Role.USER, Role.ADMIN, Role.INSTRUCTOR);
+                post("/resetpassword", securityController.resetOfPassword(), Role.ANYONE);
             });
         };
     }
