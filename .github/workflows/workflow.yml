@@ -1,7 +1,7 @@
 name: API JAVALIN WORKFLOW
 on:
   push:
-    branches: [ main ]
+    branches: [ MGold ]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -36,4 +36,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/<your-api-name>:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/FullStack:latest
